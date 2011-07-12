@@ -83,12 +83,32 @@ function getCircleHashTag(){
 	return "";
 }
 
-var circle_hashtag=getCircleHashTag();
-console.log(circle_hashtag);
-if(circle_hashtag != ""){
-	hidePosts(function(post,text) {
-		console.log(text);
-		if(text.match(circle_hashtag)==null){return true;}
-		return false;
-	});
+
+function filter_circles(e){
+	var circle_hashtag=getCircleHashTag();
+	console.log(circle_hashtag);
+	if(circle_hashtag != ""){
+		hidePosts(function(post,text) {
+			console.log(text);
+			if(text.match(circle_hashtag)==null){return true;}
+			return false;
+		});
+	}
 }
+
+var lastGroup = "";
+function checkForChange(){
+	try{
+		contentpane=$("div[id=contentPane]").get(0);
+		var curGroup = descend(contentPane,[0,0,0]).innerHTML;
+		if(curGroup != lastGroup){
+			lastGroup = curGroup;
+			filter_circles();
+		}
+	} catch(err){
+		console.log("Error:"+err);
+	}
+}
+
+console.log($("div[id=contentPane]").get(0));
+setInterval(checkForChange,250)//Hack!Hack!Hack!
