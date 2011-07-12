@@ -1,3 +1,5 @@
+var tagtext="";
+
 function descend(start,childlist){
 	var curchild = start;
 	for(index in childlist) {
@@ -64,6 +66,11 @@ function gettags(){
 	             filter(function(){return this.id.match(/\:..\.f/)});
 	return match.text().split(" ");
 }
-setInterval(function(){hideTaggedPosts(gettags());},1000);
-
-
+setInterval(
+	function(){
+		var newtext=gettags();
+		if(newtext!=tagtext){
+			tagtext=newtext;
+			hideTaggedPosts(gettags());
+		}
+	},250);
