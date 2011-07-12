@@ -25,7 +25,7 @@ function tryToGetPostText(post){
 		postText = "";
 		console.log("caught err:"+err);//Doesn't work on all?
 	}
-	console.log("Text:"+postText);
+	//console.log("Text:"+postText);
 	return postText;
 }
 
@@ -69,7 +69,7 @@ function getCircleHashTag(){
 	if(circlename.match("<span class")){
 		circlename = descend(contentPane,[0,0,0,0]).innerHTML;
 	}
-	console.log(circlename);
+	//console.log(circlename);
 	if(circlename[0] == "#"){
 		return circlename;
 	}
@@ -79,7 +79,7 @@ function getCircleHashTag(){
 
 function filter_circles(e){
 	var circle_hashtag=getCircleHashTag();
-	console.log(circle_hashtag);
+	//console.log(circle_hashtag);
 	if(circle_hashtag != ""){
 		hidePosts(function(post,text) {
 			//console.log(text);
