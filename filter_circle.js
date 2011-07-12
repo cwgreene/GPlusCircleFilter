@@ -8,7 +8,7 @@ var tagtext="";
 * and the returns the node at the end of the tree path*/
 function descend(start,childlist){
 	var curchild = start;
-	console.log(start);
+	//console.log(start);
 	for(index in childlist) {
 		var i = childlist[index];
 		curchild = curchild.childNodes[i];
@@ -27,16 +27,6 @@ function tryToGetPostText(post){
 	}
 	console.log("Text:"+postText);
 	return postText;
-}
-
-function inList(value,alist){
-	//console.log(value+":"+alist)
-	for(var index in alist){
-		if(value == alist[index]){
-			return true;
-		}
-	}
-	return false;
 }
 
 function hideTaggedPost(post,tag,hiddenlist){
@@ -74,9 +64,12 @@ function hidePosts(func){
 }
 
 function getCircleHashTag(){
-	var ahref = descend($("div[class='a-la-h-ga a-la-h-Pa']").get(0),
-                            [0]);
-	var circlename = ahref.innerHTML;
+	var contentpane=$("div[id=contentPane]").get(0);
+	var circlename = descend(contentPane,[0,0,0]).innerHTML;
+	if(circlename.match("<span class")){
+		circlename = descend(contentPane,[0,0,0,0]).innerHTML;
+	}
+	console.log(circlename);
 	if(circlename[0] == "#"){
 		return circlename;
 	}
@@ -89,7 +82,7 @@ function filter_circles(e){
 	console.log(circle_hashtag);
 	if(circle_hashtag != ""){
 		hidePosts(function(post,text) {
-			console.log(text);
+			//console.log(text);
 			if(text.match(circle_hashtag)==null){return true;}
 			return false;
 		});
@@ -99,7 +92,7 @@ function filter_circles(e){
 var lastGroup = "";
 function checkForChange(){
 	try{
-		contentpane=$("div[id=contentPane]").get(0);
+		var contentpane=$("div[id=contentPane]").get(0);
 		var curGroup = descend(contentPane,[0,0,0]).innerHTML;
 		if(curGroup != lastGroup){
 			lastGroup = curGroup;
