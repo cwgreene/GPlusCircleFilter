@@ -1,5 +1,7 @@
 var tagtext="";
 
+/*descend takes a starting DOM node and a list of indices
+* and the returns the node at the end of the tree path*/
 function descend(start,childlist){
 	var curchild = start;
 	for(index in childlist) {
@@ -12,16 +14,17 @@ function descend(start,childlist){
 function tryToGetPostText(post){
 	try{
 		var domchild = post.children()[0];
-		var postText = descend(domchild,[1,0,0,0]).innerHTML;
+		var magic_path = [1,0,0,0];//This will probably break.
+		var postText = descend(domchild,magic_path).innerHTML;
 	}catch(err){
 		postText = "";
-		//console.log("caught err:"+err);
+		//console.log("caught err:"+err);//Doesn't work on all?
 	}
 	return postText;
 }
 
 function inList(value,alist){
-	console.log(value+":"+alist)
+	//console.log(value+":"+alist)
 	for(var index in alist){
 		if(value == alist[index]){
 			return true;
@@ -33,8 +36,8 @@ function inList(value,alist){
 function hideTaggedPost(post,tag,hiddenlist){
 	var postText = tryToGetPostText(post);
 	if(postText.match(""+tag)){
-		console.log("tag:"+tag+"//text:"+postText+
-		            post.get(0));
+		//console.log("tag:"+tag+"//text:"+postText+
+		//           post.get(0));
 		hiddenlist[post.get(0)]=true;
 		post.css("display","none");
 	}
