@@ -4,6 +4,8 @@
   "description": "Hacking Google Plus",
   "background_page":"background.html",
   "browser_action": {
+	"icon" :"plusplus.png",
+	"popup":"popup.html"
   },
   "permissions": [
   ],
