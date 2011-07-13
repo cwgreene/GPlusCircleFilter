@@ -1,1 +1,7 @@
 Google Plus Extensions
+
+To install:
+	-Grab the git repository into folder gplusextension
+	-access chrome://extensions in your chrome browser
+	-click "Load Unpacked Extensions"
+	-select the folder.
