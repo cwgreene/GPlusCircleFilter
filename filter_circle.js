@@ -85,7 +85,7 @@ function filter_circles(e){
 	if(circle_hashtag != ""){
 		hidePosts(function(post,text) {
 			//console.log(text);
-			if(text.match(hastag_regex)==null){return true;}
+			if(text.match(hashtag_regex)==null){return true;}
 			return false;
 		});
 	}
