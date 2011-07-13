@@ -79,11 +79,13 @@ function getCircleHashTag(){
 
 function filter_circles(e){
 	var circle_hashtag=getCircleHashTag();
+	var nofollow= "[^a-zA-Z0-9]";
+	var hashtag_regex = circle_hashtag+nofollow;
 	//console.log(circle_hashtag);
 	if(circle_hashtag != ""){
 		hidePosts(function(post,text) {
 			//console.log(text);
-			if(text.match(circle_hashtag)==null){return true;}
+			if(text.match(hastag_regex)==null){return true;}
 			return false;
 		});
 	}
