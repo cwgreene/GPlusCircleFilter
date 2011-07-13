@@ -23,7 +23,8 @@ function tryToGetPostText(post){
 		var postText = descend(domchild,magic_path).innerHTML;
 	}catch(err){
 		postText = "";
-		console.log("caught err:"+err);//Doesn't work on all?
+//		console.log(post.get(0))
+//		console.log("caught err:"+err);//Doesn't work on all?
 	}
 	//console.log("Text:"+postText);
 	return postText;
@@ -31,11 +32,18 @@ function tryToGetPostText(post){
 
 function hideTaggedPost(post,tag,hiddenlist){
 	var postText = tryToGetPostText(post);
+	try{
 	if(postText.match(""+tag)){
 		//console.log("tag:"+tag+"//text:"+postText+
 			//           post.get(0));
 		hidePost(post,hiddenlist);
 	}
+	}catch(err){
+		console.log("hideTaggedPost:");
+		console.log(post);
+		console.log(err);
+	}
+
 }
 
 function hidePost(post,hiddenlist){
@@ -45,6 +53,8 @@ function hidePost(post,hiddenlist){
 
 /*takes a boolean function(post,text), and hides those posts*/
 function hidePosts(func){
+	//Shouldn't hiddenlist get recreated each time this
+	//function gets called?
 	var hiddenlist = {};
 	var selection = $("div[id*=update]");
 	selection.each(function (){
@@ -52,9 +62,15 @@ function hidePosts(func){
 			var text = tryToGetPostText($post);
 			if(func($post,text)){
 				hidePost($post,hiddenlist);
+			}else{
+				//For some reason, the next
+				//each doesn't work...
+				$post.css("display","block");
 			}
 		});
+
 	/*Explicitly show all non-hidden posts*/
+	/*NOTE:...and this doesn't seem to work.*/
 	selection.each( function(){
 		   var $post = $(this);
 		   if(hiddenlist[$post.get(0)] == undefined){
@@ -65,6 +81,7 @@ function hidePosts(func){
 
 function getCircleHashTag(){
 	var contentpane=$("div[id=contentPane]").get(0);
+	try{
 	var circlename = descend(contentPane,[0,0,0]).innerHTML;
 	if(circlename.match("<span class")){
 		circlename = descend(contentPane,[0,0,0,0]).innerHTML;
@@ -72,6 +89,11 @@ function getCircleHashTag(){
 	//console.log(circlename);
 	if(circlename[0] == "#"){
 		return circlename;
+	}
+	}catch(err){
+		console.log("getCircleHashTag:");
+		console.log(contentPane);
+		console.log(err);
 	}
 	return "";
 }
@@ -85,18 +107,41 @@ function filter_circles(e){
 	if(circle_hashtag != ""){
 		hidePosts(function(post,text) {
 			//console.log(text);
-			if(text.match(hashtag_regex)==null){return true;}
-			return false;
+			try{
+				//undefined needs to be expanded
+				//for larger use cases
+				if(text==undefined){
+					//If we can't parse it
+					//hide it.
+					console.log(post);
+					return true;
+				}
+				if(text.match(hashtag_regex)==null){
+					return true;
+				}
+				return false;
+			}catch(err){
+				console.log("filter_circles:");
+				console.log(post);
+				console.log(err);
+			}
 		});
 	}
 }
 
+
+/*The following needs a lot more work to be general
+* For starters, clicking more breaks things. A fast way to
+* deal with all posts might be a very good idea.*/
 var lastGroup = "";
-function checkForChange(){
+function checkForChange(force){
+	if(force == undefined){
+		force = false;
+	}
 	try{
 		var contentpane=$("div[id=contentPane]").get(0);
 		var curGroup = descend(contentPane,[0,0,0]).innerHTML;
-		if(curGroup != lastGroup){
+		if(curGroup != lastGroup || force){
 			lastGroup = curGroup;
 			filter_circles();
 		}
@@ -106,4 +151,7 @@ function checkForChange(){
 }
 
 console.log($("div[id=contentPane]").get(0));
-setInterval(checkForChange,250)//Hack!Hack!Hack!
+/*addEventListener("mousedown",
+	function(){console.log("hey");
+		setTimeout(function(){checkForChange(true)},1000)});*/
+setInterval(function(){checkForChange(true)},120)//Hack!Hack!Hack!
