@@ -101,7 +101,7 @@ function getCircleHashTag(){
 
 function filter_circles(e){
 	var circle_hashtag=getCircleHashTag();
-	console.log(circle_hashtag);
+	//console.log(circle_hashtag);
 	var nofollow= "[^a-zA-Z0-9]";
 	var hashtag_regex = circle_hashtag+nofollow;
 	//console.log(circle_hashtag);
