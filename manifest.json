@@ -11,7 +11,7 @@
   ],
   "content_scripts":[
    {
-      "matches":["https://plus.google.com/*"],
+      "matches":["https://plus.google.com/stream/*"],
       "js":["jquery.min.js","filter_circle.js"]
    }]
 }
